@@ -9,10 +9,7 @@ import java.io.IOException;
 
 public class GameCanvas extends JPanel {
     BufferedImage background;
-    BufferedImage player;
-    int playerX = 176;
-    int playerY = 500;
-
+    Player p;
     Enemy e;
 
     boolean leftPressed;
@@ -22,9 +19,10 @@ public class GameCanvas extends JPanel {
 
     public GameCanvas() {
         e = new Enemy();
+        p = new Player();
         try {
             background = ImageIO.read(new File("assets/images/background/0.png"));
-            player = ImageIO.read(new File("assets/images/players/straight/0.png"));
+            p.loadImage();
             e.loadImage();
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,26 +37,26 @@ public class GameCanvas extends JPanel {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                     leftPressed = true;
                 } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     rightPressed = true;
                 } else if (e.getKeyCode() == KeyEvent.VK_UP) {
                     upPressed = true;
-                } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     downPressed = true;
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                     leftPressed = false;
                 } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     rightPressed = false;
                 } else if (e.getKeyCode() == KeyEvent.VK_UP) {
                     upPressed = false;
-                } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+                } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     downPressed = false;
                 }
             }
@@ -70,7 +68,7 @@ public class GameCanvas extends JPanel {
         super.paintComponent(g);
         g.fillRect(0, 0, 384, 600);
         g.drawImage(background, 0, 0, null);
-        g.drawImage(player, playerX, playerY, null);
+        p.paint(g);
         e.paint(g);
     }
 
@@ -79,22 +77,11 @@ public class GameCanvas extends JPanel {
     }
 
     void updatePlayerPosition() {
-        if(leftPressed) {
-            playerX -= 5;
-        }
-        if(rightPressed) {
-            playerX += 5;
-        }
-        if(upPressed) {
-            playerY -= 5;
-        }
-        if(downPressed) {
-            playerY += 5;
-        }
+        p.move(leftPressed, rightPressed, upPressed, downPressed);
     }
 
     public void gameLoop() {
-        while(true) {
+        while (true) {
             updatePlayerPosition();
             updateEnemyPosition();
             repaint();
