@@ -6,11 +6,13 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GameCanvas extends JPanel {
     BufferedImage background;
     Player p;
     Enemy e;
+    PlayerSpell ps;
 
     boolean leftPressed;
     boolean rightPressed;
@@ -20,8 +22,12 @@ public class GameCanvas extends JPanel {
     public GameCanvas() {
         e = new Enemy();
         p = new Player();
+        ps = new PlayerSpell();
+        ps.x = 170;
+        ps.y = 450;
         try {
             background = ImageIO.read(new File("assets/images/background/0.png"));
+            ps.loadImage();
             p.loadImage();
             e.loadImage();
         } catch (IOException e) {
@@ -70,6 +76,7 @@ public class GameCanvas extends JPanel {
         g.drawImage(background, 0, 0, null);
         p.paint(g);
         e.paint(g);
+        ps.paint(g);
     }
 
     void updateEnemyPosition() {
@@ -80,10 +87,15 @@ public class GameCanvas extends JPanel {
         p.move(leftPressed, rightPressed, upPressed, downPressed);
     }
 
+    void updatePlayerSpellPosition() {
+        ps.move();
+    }
+
     public void gameLoop() {
         while (true) {
             updatePlayerPosition();
             updateEnemyPosition();
+            updatePlayerSpellPosition();
             repaint();
             try {
                 Thread.sleep(17);
