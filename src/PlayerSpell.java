@@ -9,6 +9,11 @@ public class PlayerSpell {
     int y;
     BufferedImage image;
 
+    PlayerSpell(int xStart, int yStart) {
+        x = xStart;
+        y = yStart;
+    }
+
     void loadImage() {
         try {
             image = ImageIO.read(new File("assets/images/player-spells/a/0.png"));

@@ -7,27 +7,29 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class GameCanvas extends JPanel {
     BufferedImage background;
     Player p;
     Enemy e;
-    PlayerSpell ps;
+    ArrayList<PlayerSpell> spells;
 
     boolean leftPressed;
     boolean rightPressed;
     boolean upPressed;
     boolean downPressed;
+    boolean xPressed;
 
     public GameCanvas() {
         e = new Enemy();
         p = new Player();
-        ps = new PlayerSpell();
-        ps.x = 170;
-        ps.y = 450;
+        spells = new ArrayList<>();
+        PlayerSpell firstSpell = new PlayerSpell(170, 450);
+        firstSpell.loadImage();
+        spells.add(firstSpell);
         try {
             background = ImageIO.read(new File("assets/images/background/0.png"));
-            ps.loadImage();
             p.loadImage();
             e.loadImage();
         } catch (IOException e) {
@@ -51,6 +53,8 @@ public class GameCanvas extends JPanel {
                     upPressed = true;
                 } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     downPressed = true;
+                } else if (e.getKeyCode() == KeyEvent.VK_X) {
+                    xPressed = true;
                 }
             }
 
@@ -64,6 +68,8 @@ public class GameCanvas extends JPanel {
                     upPressed = false;
                 } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                     downPressed = false;
+                } else if (e.getKeyCode() == KeyEvent.VK_X) {
+                    xPressed = false;
                 }
             }
         });
@@ -76,7 +82,11 @@ public class GameCanvas extends JPanel {
         g.drawImage(background, 0, 0, null);
         p.paint(g);
         e.paint(g);
-        ps.paint(g);
+        synchronized (spells) {
+            for(PlayerSpell ps: spells) {
+                ps.paint(g);
+            }
+        }
     }
 
     void updateEnemyPosition() {
@@ -88,11 +98,24 @@ public class GameCanvas extends JPanel {
     }
 
     void updatePlayerSpellPosition() {
-        ps.move();
+        for (PlayerSpell ps: spells) {
+            ps.move();
+        }
+    }
+
+    void castSpells() {
+        if (xPressed) {
+            PlayerSpell newSpell = new PlayerSpell(p.x, p.y);
+            newSpell.loadImage();
+            synchronized (spells) {
+                spells.add(newSpell);
+            }
+        }
     }
 
     public void gameLoop() {
         while (true) {
+            castSpells();
             updatePlayerPosition();
             updateEnemyPosition();
             updatePlayerSpellPosition();
