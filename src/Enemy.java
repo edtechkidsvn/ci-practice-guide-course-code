@@ -4,10 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Enemy {
-    int x;
-    int y;
-    BufferedImage image;
+public class Enemy extends GameObject {
 
     Enemy(int xStart, int yStart) {
         x = xStart;
@@ -20,10 +17,6 @@ public class Enemy {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    void paint(Graphics g) {
-        g.drawImage(image, x, y, null);
     }
 
     void updatePosition() {
