@@ -9,14 +9,6 @@ public class GameObject {
     int y;
     BufferedImage image;
 
-    void loadImage() {
-        try {
-            image = ImageIO.read(new File("assets/images/enemies/level0/blue/0.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     void paint(Graphics g) {
         g.drawImage(image, x, y, null);
     }

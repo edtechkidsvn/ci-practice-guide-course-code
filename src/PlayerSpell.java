@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class PlayerSpell {
+public class PlayerSpell extends GameObject {
     int x;
     int y;
     BufferedImage image;

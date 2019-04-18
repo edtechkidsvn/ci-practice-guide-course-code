@@ -22,7 +22,7 @@ public class GameCanvas extends JPanel {
     boolean xPressed;
 
     public GameCanvas() {
-        e = new Enemy();
+        e = new Enemy(170, 0);
         p = new Player();
         spells = new ArrayList<>();
         PlayerSpell firstSpell = new PlayerSpell(170, 450);

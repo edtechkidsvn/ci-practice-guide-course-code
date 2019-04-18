@@ -4,10 +4,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Player {
-    int x = 170;
-    int y = 500;
-    BufferedImage image;
+public class Player extends GameObject {
+
+    Player() {
+        x = 170;
+        y = 500;
+    }
 
     void loadImage() {
         try {
@@ -15,10 +17,6 @@ public class Player {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    void paint(Graphics g) {
-        g.drawImage(image, x, y, null);
     }
 
     void move(boolean leftPressed, boolean rightPressed, boolean upPressed, boolean downPressed) {
